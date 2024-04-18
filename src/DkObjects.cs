@@ -1,3 +1,4 @@
+#pragma warning disable IDE0161 // 範囲指定されたファイルが設定された namespace に変換
 namespace Tool.Compet.Core {
 	using System;
 	using System.Reflection;
@@ -18,7 +19,7 @@ namespace Tool.Compet.Core {
 					typeof(T),
 					BindingFlags.CreateInstance | BindingFlags.Public | BindingFlags.Instance | BindingFlags.OptionalParamBinding,
 					null,
-					new Object[] { Type.Missing },
+					[Type.Missing],
 					null
 				)!;
 			}

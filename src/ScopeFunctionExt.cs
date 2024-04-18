@@ -1,3 +1,4 @@
+#pragma warning disable IDE0161 // 範囲指定されたファイルが設定された namespace に変換
 namespace Tool.Compet.Core {
 	/// Cleaner coding style with scope functions.
 	/// Ref: Kotlin's also(), let(),...

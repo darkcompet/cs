@@ -1,3 +1,4 @@
+#pragma warning disable IDE0161 // 範囲指定されたファイルが設定された namespace に変換
 namespace Tool.Compet.Core {
 	/// Extension for collection (array, list, set, map,...).
 	public static class CollectionExt {

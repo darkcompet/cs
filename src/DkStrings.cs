@@ -1,3 +1,4 @@
+#pragma warning disable IDE0161 // 範囲指定されたファイルが設定された namespace に変換
 namespace Tool.Compet.Core {
 	using System.Runtime.CompilerServices;
 
@@ -6,13 +7,13 @@ namespace Tool.Compet.Core {
 		/// Compare 2 strings with `Ordinal` comparision (byte-level).
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool EqualsDk(this string? me, string? other) {
-			return me == null ? other == null : me.Equals(other, System.StringComparison.Ordinal);
+			return me == null ? other == null : me.Equals(other, StringComparison.Ordinal);
 		}
 
 		/// Compare 2 strings with `OrdinalIgnoreCase` comparision (byte-level).
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool EqualsIgnoreCaseDk(this string? me, string? other) {
-			return me == null ? other == null : me.Equals(other, System.StringComparison.OrdinalIgnoreCase);
+			return me == null ? other == null : me.Equals(other, StringComparison.OrdinalIgnoreCase);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -28,26 +29,26 @@ namespace Tool.Compet.Core {
 		/// Check this string starts with given `value` by comparing as `Ordinal` (byte-level).
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool StartsWithDk(this string me, string value) {
-			return me.StartsWith(value, System.StringComparison.Ordinal);
+			return me.StartsWith(value, StringComparison.Ordinal);
 		}
 
 		/// Check this string ends with given `value` by comparing as `Ordinal` (byte-level).
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool EndsWithDk(this string me, string value) {
-			return me.EndsWith(value, System.StringComparison.Ordinal);
+			return me.EndsWith(value, StringComparison.Ordinal);
 		}
 
 		/// @param startIndex: Inclusive.
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static string SubstringDk(this string me, int startIndex) {
-			return me.Substring(startIndex, me.Length - startIndex);
+			return me[startIndex..];
 		}
 
 		/// @param startIndex: Inclusive.
 		/// @param endIndex: Exclusive.
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static string SubstringDk(this string me, int startIndex, int endIndex) {
-			return me.Substring(startIndex, endIndex - startIndex);
+			return me[startIndex..endIndex];
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -117,7 +118,7 @@ namespace Tool.Compet.Core {
 		/// Get first index of given `element` in the array. Returns -1 if not found.
 		public static int IndexOfDk(this string[] arr, string? element) {
 			for (int index = 0, N = arr.Length; index < N; ++index) {
-				if (arr[index].Equals(element, System.StringComparison.Ordinal)) {
+				if (arr[index].Equals(element, StringComparison.Ordinal)) {
 					return index;
 				}
 			}
@@ -127,7 +128,7 @@ namespace Tool.Compet.Core {
 		/// Get last index of given `element` in the array. Returns -1 if not found.
 		public static int LastIndexOfDk(this string[] arr, string? element) {
 			for (var index = arr.Length - 1; index >= 0; --index) {
-				if (arr[index].Equals(element, System.StringComparison.Ordinal)) {
+				if (arr[index].Equals(element, StringComparison.Ordinal)) {
 					return index;
 				}
 			}
