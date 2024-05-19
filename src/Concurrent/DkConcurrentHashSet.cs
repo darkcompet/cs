@@ -1,4 +1,5 @@
 #pragma warning disable IDE0161 // 範囲指定されたファイルが設定された namespace に変換
+
 namespace Tool.Compet.Core {
 	using System;
 	using System.Collections;
@@ -167,10 +168,8 @@ namespace Tool.Compet.Core {
 		/// <exception cref="ArgumentNullException"><paramref name="collection"/> is a null reference
 		/// (Nothing in Visual Basic).
 		/// </exception>
-		public DkConcurrentHashSet(IEnumerable<T> collection, IEqualityComparer<T>? comparer)
-				: this(comparer) {
-			if (collection == null)
-				throw new ArgumentNullException(nameof(collection));
+		public DkConcurrentHashSet(IEnumerable<T> collection, IEqualityComparer<T>? comparer) : this(comparer) {
+			ArgumentNullException.ThrowIfNull(collection);
 
 			this.InitializeFromCollection(collection);
 		}
@@ -196,8 +195,7 @@ namespace Tool.Compet.Core {
 		/// </exception>
 		public DkConcurrentHashSet(int concurrencyLevel, IEnumerable<T> collection, IEqualityComparer<T>? comparer)
 				: this(concurrencyLevel, DefaultCapacity, false, comparer) {
-			if (collection == null)
-				throw new ArgumentNullException(nameof(collection));
+			ArgumentNullException.ThrowIfNull(collection);
 
 			this.InitializeFromCollection(collection);
 		}
@@ -223,10 +221,8 @@ namespace Tool.Compet.Core {
 		}
 
 		private DkConcurrentHashSet(int concurrencyLevel, int capacity, bool growLockArray, IEqualityComparer<T>? comparer) {
-			if (concurrencyLevel < 1)
-				throw new ArgumentOutOfRangeException(nameof(concurrencyLevel));
-			if (capacity < 0)
-				throw new ArgumentOutOfRangeException(nameof(capacity));
+			ArgumentOutOfRangeException.ThrowIfLessThan(concurrencyLevel, 1);
+			ArgumentOutOfRangeException.ThrowIfNegative(capacity);
 
 			// The capacity should be at least as large as the concurrency level. Otherwise, we would have locks that don't guard
 			// any buckets.
@@ -256,8 +252,9 @@ namespace Tool.Compet.Core {
 		/// successfully; false if it already exists.</returns>
 		/// <exception cref="OverflowException">The <see cref="DkConcurrentHashSet{T}"/>
 		/// contains too many items.</exception>
-		public bool Add(T item) =>
-				this.AddInternal(item, this._comparer.GetHashCode(item), true);
+		public bool Add(T item) {
+			return this.AddInternal(item, this._comparer.GetHashCode(item), true);
+		}
 
 		/// <summary>
 		/// Removes all items from the <see cref="DkConcurrentHashSet{T}"/>.
@@ -287,7 +284,9 @@ namespace Tool.Compet.Core {
 		/// </summary>
 		/// <param name="item">The item to locate in the <see cref="DkConcurrentHashSet{T}"/>.</param>
 		/// <returns>true if the <see cref="DkConcurrentHashSet{T}"/> contains the item; otherwise, false.</returns>
-		public bool Contains(T item) => this.TryGetValue(item, out _);
+		public bool Contains(T item) {
+			return this.TryGetValue(item, out _);
+		}
 
 		/// <summary>
 		/// Searches the <see cref="DkConcurrentHashSet{T}"/> for a given value and returns the equal value it finds, if any.
@@ -336,7 +335,7 @@ namespace Tool.Compet.Core {
 			while (true) {
 				var tables = this._tables;
 
-				GetBucketAndLockNo(hashcode, out int bucketNo, out int lockNo, tables.Buckets.Length, tables.Locks.Length);
+				GetBucketAndLockNo(hashcode, out var bucketNo, out var lockNo, tables.Buckets.Length, tables.Locks.Length);
 
 				lock (tables.Locks[lockNo]) {
 					// If the table just got resized, we may not be holding the right lock, and must retry.
@@ -368,7 +367,9 @@ namespace Tool.Compet.Core {
 			}
 		}
 
-		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>)this).GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() {
+			return ((IEnumerable<T>)this).GetEnumerator();
+		}
 
 		/// <summary>Returns an enumerator that iterates through the <see
 		/// cref="DkConcurrentHashSet{T}"/>.</summary>
@@ -379,7 +380,9 @@ namespace Tool.Compet.Core {
 		/// of the collection.  The contents exposed through the enumerator may contain modifications
 		/// made to the collection after <see cref="IEnumerable{T}.GetEnumerator"/> was called.
 		/// </remarks>
-		IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator(this);
+		IEnumerator<T> IEnumerable<T>.GetEnumerator() {
+			return new Enumerator(this);
+		}
 
 		/// <summary>Returns a value-type enumerator that iterates through the <see
 		/// cref="DkConcurrentHashSet{T}"/>.</summary>
@@ -390,24 +393,29 @@ namespace Tool.Compet.Core {
 		/// of the collection.  The contents exposed through the enumerator may contain modifications
 		/// made to the collection after <see cref="GetEnumerator"/> was called.
 		/// </remarks>
-		public Enumerator GetEnumerator() => new Enumerator(this);
+		public Enumerator GetEnumerator() {
+			return new Enumerator(this);
+		}
 
 		/// <summary>
 		/// Represents an enumerator for <see cref="DkConcurrentHashSet{T}" />.
 		/// </summary>
-		public struct Enumerator : IEnumerator<T> {
+		/// <remarks>
+		/// Constructs an enumerator for <see cref="DkConcurrentHashSet{T}" />.
+		/// </remarks>
+		public struct Enumerator(DkConcurrentHashSet<T> set) : IEnumerator<T> {
 			// Provides a manually-implemented version of (approximately) this iterator:
 			//     Node?[] buckets = _tables.Buckets;
 			//     for (int i = 0; i < buckets.Length; i++)
 			//         for (Node? current = Volatile.Read(ref buckets[i]); current != null; current = current.Next)
 			//             yield return new current.Item;
 
-			private readonly DkConcurrentHashSet<T> _set;
+			private readonly DkConcurrentHashSet<T> _set = set;
 
-			private Node?[]? _buckets;
-			private Node? _node;
-			private int _i;
-			private int _state;
+			private Node?[]? _buckets = null;
+			private Node? _node = null;
+			private int _i = -1;
+			private int _state = StateUninitialized;
 
 			private const int StateUninitialized = 0;
 			private const int StateOuterloop = 1;
@@ -415,24 +423,12 @@ namespace Tool.Compet.Core {
 			private const int StateDone = 3;
 
 			/// <summary>
-			/// Constructs an enumerator for <see cref="DkConcurrentHashSet{T}" />.
-			/// </summary>
-			public Enumerator(DkConcurrentHashSet<T> set) {
-				this._set = set;
-				this._buckets = null;
-				this._node = null;
-				this.Current = default!;
-				this._i = -1;
-				this._state = StateUninitialized;
-			}
-
-			/// <summary>
 			/// Gets the element in the collection at the current position of the enumerator.
 			/// </summary>
 			/// <value>The element in the collection at the current position of the enumerator.</value>
-			public T Current { get; private set; }
+			public T Current { get; private set; } = default!;
 
-			object? IEnumerator.Current => this.Current;
+			readonly object? IEnumerator.Current => this.Current;
 
 			/// <summary>
 			/// Sets the enumerator to its initial position, which is before the first element in the collection.
@@ -448,7 +444,7 @@ namespace Tool.Compet.Core {
 			/// <summary>
 			/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 			/// </summary>
-			public void Dispose() { }
+			public readonly void Dispose() { }
 
 			/// <summary>
 			/// Advances the enumerator to the next element of the collection.
@@ -462,10 +458,10 @@ namespace Tool.Compet.Core {
 						goto case StateOuterloop;
 
 					case StateOuterloop:
-						Node?[]? buckets = this._buckets;
+						var buckets = this._buckets;
 						Debug.Assert(buckets != null);
 
-						int i = ++this._i;
+						var i = ++this._i;
 						if ((uint)i < (uint)buckets!.Length) {
 							// The Volatile.Read ensures that we have a copy of the reference to buckets[i]:
 							// this protects us from reading fields ('_key', '_value' and '_next') of different instances.
@@ -476,7 +472,7 @@ namespace Tool.Compet.Core {
 						goto default;
 
 					case StateInnerLoop:
-						Node? node = this._node;
+						var node = this._node;
 						if (node != null) {
 							this.Current = node.Item;
 							this._node = node.Next;
@@ -491,15 +487,15 @@ namespace Tool.Compet.Core {
 			}
 		}
 
-		void ICollection<T>.Add(T item) => this.Add(item);
+		void ICollection<T>.Add(T item) {
+			this.Add(item);
+		}
 
 		bool ICollection<T>.IsReadOnly => false;
 
 		void ICollection<T>.CopyTo(T[] array, int arrayIndex) {
-			if (array == null)
-				throw new ArgumentNullException(nameof(array));
-			if (arrayIndex < 0)
-				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+			ArgumentNullException.ThrowIfNull(array);
+			ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex);
 
 			var locksAcquired = 0;
 			try {
@@ -524,7 +520,9 @@ namespace Tool.Compet.Core {
 			}
 		}
 
-		bool ICollection<T>.Remove(T item) => this.TryRemove(item);
+		bool ICollection<T>.Remove(T item) {
+			return this.TryRemove(item);
+		}
 
 		private void InitializeFromCollection(IEnumerable<T> collection) {
 			foreach (var item in collection) {
@@ -541,7 +539,7 @@ namespace Tool.Compet.Core {
 			while (true) {
 				var tables = this._tables;
 
-				GetBucketAndLockNo(hashcode, out int bucketNo, out int lockNo, tables.Buckets.Length, tables.Locks.Length);
+				GetBucketAndLockNo(hashcode, out var bucketNo, out var lockNo, tables.Buckets.Length, tables.Locks.Length);
 
 				var resizeDesired = false;
 				var lockTaken = false;
@@ -717,7 +715,7 @@ namespace Tool.Compet.Core {
 					var current = tables.Buckets[i];
 					while (current != null) {
 						var next = current.Next;
-						GetBucketAndLockNo(current.Hashcode, out int newBucketNo, out int newLockNo, newBuckets.Length, newLocks.Length);
+						GetBucketAndLockNo(current.Hashcode, out var newBucketNo, out var newLockNo, newBuckets.Length, newLocks.Length);
 
 						newBuckets[newBucketNo] = new Node(current.Item, current.Hashcode, newBuckets[newBucketNo]);
 
@@ -786,30 +784,18 @@ namespace Tool.Compet.Core {
 			}
 		}
 
-		private class Tables {
-			public readonly Node?[] Buckets;
-			public readonly object[] Locks;
+		private class Tables(Node?[] buckets, object[] locks, int[] countPerLock) {
+			public readonly Node?[] Buckets = buckets;
+			public readonly object[] Locks = locks;
 
-			public readonly int[] CountPerLock;
-
-			public Tables(Node?[] buckets, object[] locks, int[] countPerLock) {
-				this.Buckets = buckets;
-				this.Locks = locks;
-				this.CountPerLock = countPerLock;
-			}
+			public readonly int[] CountPerLock = countPerLock;
 		}
 
-		private class Node {
-			public readonly T Item;
-			public readonly int Hashcode;
+		private class Node(T item, int hashcode, Node? next) {
+			public readonly T Item = item;
+			public readonly int Hashcode = hashcode;
 
-			public volatile Node? Next;
-
-			public Node(T item, int hashcode, Node? next) {
-				this.Item = item;
-				this.Hashcode = hashcode;
-				this.Next = next;
-			}
+			public volatile Node? Next = next;
 		}
 	}
 }
