@@ -1,17 +1,17 @@
-#pragma warning disable IDE0161 // 範囲指定されたファイルが設定された namespace に変換
-namespace Tool.Compet.Core {
-	/// Cleaner coding style with scope functions.
-	/// Ref: Kotlin's also(), let(),...
-	public static class ScopeFunctionExt {
-		/// Use it to do more stuffs before return itself.
-		public static T AlsoDk<T>(this T self, System.Action<T> block) {
-			block(self);
-			return self;
-		}
+#pragma warning disable IDE0130 // Namespace がフォルダー構造と一致しません
+namespace Tool.Compet.Core;
 
-		/// This is same as `Also()`, but returns other type.
-		public static R LetDk<T, R>(this T self, System.Func<T, R> block) {
-			return block(self);
-		}
+/// Cleaner coding style with scope functions.
+/// Ref: Kotlin's also(), let(),...
+public static class ScopeFunctionExt {
+	/// Use it to do more stuffs before return itself.
+	public static T AlsoDk<T>(this T self, System.Action<T> block) {
+		block(self);
+		return self;
+	}
+
+	/// This is same as `Also()`, but returns other type.
+	public static R LetDk<T, R>(this T self, System.Func<T, R> block) {
+		return block(self);
 	}
 }

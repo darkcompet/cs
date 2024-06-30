@@ -1,5 +1,6 @@
-// #pragma warning disable IDE0161 // 範囲指定されたファイルが設定された namespace に変換
-// namespace Tool.Compet.Core {
+#pragma warning disable IDE0130 // Namespace がフォルダー構造と一致しません
+namespace Tool.Compet.Core;
+
 // 	/// Make singletone for subclass given type T.
 // 	/// We use `ScriptableObject` to make our singleton does not be attached to game object.
 // 	/// Note that, subclass must provide public empty constructor for initialization.
@@ -25,4 +26,3 @@
 // 			}
 // 		}
 // 	}
-// }

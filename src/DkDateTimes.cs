@@ -1,44 +1,44 @@
-#pragma warning disable IDE0161 // 範囲指定されたファイルが設定された namespace に変換
-namespace Tool.Compet.Core {
-	using System.Globalization;
+#pragma warning disable IDE0130 // Namespace がフォルダー構造と一致しません
+namespace Tool.Compet.Core;
 
-	/// Extension for string.
-	public static class DkDateTimes {
-		public const string FMT_DATE = "yyyy-MM-dd";
-		public const string FMT_TIME = "HH:mm:ss";
-		public const string FMT_DATETIME = "yyyy-MM-dd HH:mm:ss";
+using System.Globalization;
 
-		/// @param format: For eg,. yyyy-MM-dd HH:mm:ss
-		/// Ref: https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
-		/// Ref: https://www.c-sharpcorner.com/blogs/date-and-time-format-in-c-sharp-programming1
-		public static string FormatDk(this DateTime me, string? format = FMT_DATETIME) {
-			return me.ToString(format, CultureInfo.InvariantCulture);
-		}
+/// Extension for string.
+public static class DkDateTimes {
+	public const string FMT_DATE = "yyyy-MM-dd";
+	public const string FMT_TIME = "HH:mm:ss";
+	public const string FMT_DATETIME = "yyyy-MM-dd HH:mm:ss";
 
-		/// Ref: https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tounixtimeseconds?view=net-7.0
-		/// @return Epoch ms of now (number of milliseconds has elapsed from 1970-01-01T00:00:00.000Z).
-		public static long currentUnixTimeInMillis => DateTimeOffset.Now.ToUnixTimeMilliseconds();
+	/// @param format: For eg,. yyyy-MM-dd HH:mm:ss
+	/// Ref: https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
+	/// Ref: https://www.c-sharpcorner.com/blogs/date-and-time-format-in-c-sharp-programming1
+	public static string FormatDk(this DateTime me, string? format = FMT_DATETIME) {
+		return me.ToString(format, CultureInfo.InvariantCulture);
+	}
 
-		/// Ref: https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tounixtimeseconds?view=net-7.0
-		/// @return Epoch seconds of now (number of seconds has elapsed from 1970-01-01T00:00:00.000Z).
-		public static long currentUnixTimeInSeconds => DateTimeOffset.Now.ToUnixTimeSeconds();
+	/// Ref: https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tounixtimeseconds?view=net-7.0
+	/// @return Epoch ms of now (number of milliseconds has elapsed from 1970-01-01T00:00:00.000Z).
+	public static long currentUnixTimeInMillis => DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-		/// Ref: https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tounixtimeseconds?view=net-7.0
-		/// @return Epoch ms of UTC-now (number of milliseconds has elapsed from 1970-01-01T00:00:00.000Z).
-		public static long currentUnixUtcTimeInMillis => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+	/// Ref: https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tounixtimeseconds?view=net-7.0
+	/// @return Epoch seconds of now (number of seconds has elapsed from 1970-01-01T00:00:00.000Z).
+	public static long currentUnixTimeInSeconds => DateTimeOffset.Now.ToUnixTimeSeconds();
 
-		/// Ref: https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tounixtimeseconds?view=net-7.0
-		/// @return Epoch seconds of UTC-now (number of seconds has elapsed from 1970-01-01T00:00:00.000Z).
-		public static long currentUnixUtcTimeInSeconds => DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+	/// Ref: https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tounixtimeseconds?view=net-7.0
+	/// @return Epoch ms of UTC-now (number of milliseconds has elapsed from 1970-01-01T00:00:00.000Z).
+	public static long currentUnixUtcTimeInMillis => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-		/// Convert unix time (seconds) that elapsed from epoch time.
-		public static DateTime ConvertUnixTimeSecondsToUtcDatetime(long seconds) {
-			return DateTimeOffset.FromUnixTimeSeconds(seconds).UtcDateTime;
-		}
+	/// Ref: https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tounixtimeseconds?view=net-7.0
+	/// @return Epoch seconds of UTC-now (number of seconds has elapsed from 1970-01-01T00:00:00.000Z).
+	public static long currentUnixUtcTimeInSeconds => DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-		/// Convert unix time (milliseconds) that elapsed from epoch time.
-		public static DateTime ConvertUnixTimeMillisecondsToUtcDatetime(long millis) {
-			return DateTimeOffset.FromUnixTimeMilliseconds(millis).UtcDateTime;
-		}
+	/// Convert unix time (seconds) that elapsed from epoch time.
+	public static DateTime ConvertUnixTimeSecondsToUtcDatetime(long seconds) {
+		return DateTimeOffset.FromUnixTimeSeconds(seconds).UtcDateTime;
+	}
+
+	/// Convert unix time (milliseconds) that elapsed from epoch time.
+	public static DateTime ConvertUnixTimeMillisecondsToUtcDatetime(long millis) {
+		return DateTimeOffset.FromUnixTimeMilliseconds(millis).UtcDateTime;
 	}
 }

@@ -1,28 +1,28 @@
-#pragma warning disable IDE0161 // 範囲指定されたファイルが設定された namespace に変換
-namespace Tool.Compet.Core {
-	using System;
-	using System.Reflection;
+#pragma warning disable IDE0130 // Namespace がフォルダー構造と一致しません
+namespace Tool.Compet.Core;
 
-	public class DkObjects {
-		/// Create new instance from given type.
-		/// Throws exception if occured.
-		public static T NewInstace<T>() where T : class {
-			try {
-				// Go with this option when no constructor is defined,
-				// or parameterless constructor exists.
-				return Activator.CreateInstance<T>();
-			}
-			catch {
-				// Go with this option when some constructor is defined,
-				// but this will ignore params.
-				return (T)Activator.CreateInstance(
-					typeof(T),
-					BindingFlags.CreateInstance | BindingFlags.Public | BindingFlags.Instance | BindingFlags.OptionalParamBinding,
-					null,
-					[Type.Missing],
-					null
-				)!;
-			}
+using System;
+using System.Reflection;
+
+public class DkObjects {
+	/// Create new instance from given type.
+	/// Throws exception if occured.
+	public static T NewInstace<T>() where T : class {
+		try {
+			// Go with this option when no constructor is defined,
+			// or parameterless constructor exists.
+			return Activator.CreateInstance<T>();
+		}
+		catch {
+			// Go with this option when some constructor is defined,
+			// but this will ignore params.
+			return (T)Activator.CreateInstance(
+				typeof(T),
+				BindingFlags.CreateInstance | BindingFlags.Public | BindingFlags.Instance | BindingFlags.OptionalParamBinding,
+				null,
+				[Type.Missing],
+				null
+			)!;
 		}
 	}
 }
