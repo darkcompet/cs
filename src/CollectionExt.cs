@@ -36,12 +36,12 @@ namespace Tool.Compet.Core {
 		/// <typeparam name="TKey"></typeparam>
 		/// <typeparam name="TValue"></typeparam>
 		/// <param name="values"></param>
-		/// <param name="CalculateKey"></param>
+		/// <param name="keyOf">Calculate key that maps with the value</param>
 		/// <returns></returns>
-		public static Dictionary<TKey, List<TValue>> GroupByKeyDk<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> CalculateKey) where TKey : notnull {
+		public static Dictionary<TKey, List<TValue>> GroupByKeyDk<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keyOf) where TKey : notnull {
 			var key2values = new Dictionary<TKey, List<TValue>>();
 			foreach (var item in values) {
-				var key = CalculateKey(item);
+				var key = keyOf(item);
 				if (key2values.TryGetValue(key, out var list)) {
 					list.Add(item);
 				}
