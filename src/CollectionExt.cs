@@ -39,11 +39,12 @@ public static class CollectionExt {
 	/// <param name="values"></param>
 	/// <param name="keyOf">Calculate key that maps with the value</param>
 	/// <returns></returns>
-	public static Dictionary<TKey, List<TValue>> GroupByKeyDk<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keyOf) where TKey : notnull {
-		var key2values = new Dictionary<TKey, List<TValue>>();
+	public static DkHashMap<TKey, List<TValue>> GroupByKeyDk<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keyOf) where TKey : notnull {
+		var key2values = new DkHashMap<TKey, List<TValue>>();
 		foreach (var item in values) {
 			var key = keyOf(item);
-			if (key2values.TryGetValue(key, out var list)) {
+			var list = key2values[key];
+			if (list != null) {
 				list.Add(item);
 			}
 			else {
