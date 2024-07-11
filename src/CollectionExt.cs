@@ -37,12 +37,12 @@ public static class CollectionExt {
 	/// <typeparam name="TKey"></typeparam>
 	/// <typeparam name="TValue"></typeparam>
 	/// <param name="values"></param>
-	/// <param name="keyOf">Calculate key that maps with the value</param>
+	/// <param name="CalcKey">Calculate key that maps with the value</param>
 	/// <returns></returns>
-	public static DkHashMap<TKey, List<TValue>> GroupByKeyDk<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keyOf) where TKey : notnull {
+	public static DkHashMap<TKey, List<TValue>> GroupByDk<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> CalcKey) where TKey : notnull {
 		var key2values = new DkHashMap<TKey, List<TValue>>();
 		foreach (var item in values) {
-			var key = keyOf(item);
+			var key = CalcKey(item);
 			var list = key2values[key];
 			if (list != null) {
 				list.Add(item);
