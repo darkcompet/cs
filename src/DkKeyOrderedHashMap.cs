@@ -3,19 +3,14 @@ namespace Tool.Compet.Core;
 
 /// Default Dictionary will change (sort) keys, so it does not preserve order of keys.
 /// This class keep tracking order of keys when add, remove, ... the entry.
-public class DkKeyOrderedDictionary<T> {
-	private readonly List<string> _keys;
-	private readonly Dictionary<string, T> _map;
-
-	public DkKeyOrderedDictionary(int capacity = 10) {
-		this._keys = new(capacity);
-		this._map = new Dictionary<string, T>(capacity);
-	}
+public class DkKeyOrderedHashMap<T>(int capacity = 10) {
+	private readonly List<string> _keys = new(capacity);
+	private readonly Dictionary<string, T> _map = new(capacity);
 
 	/// Define the indexer to allow client code to use [] notation.
 	public T this[string key] {
-		get { return this._map[key]; }
-		set { this._map[key] = value; }
+		get => this._map[key];
+		set => this._map[key] = value;
 	}
 
 	// public T this[int index] {
@@ -41,7 +36,7 @@ public class DkKeyOrderedDictionary<T> {
 	}
 
 	public int Count => this._keys.Count;
-	public long LongCount => this._keys.LongCount();
+	public long LongCount => this._keys.Count;
 
 	public string[] Keys {
 		get {
