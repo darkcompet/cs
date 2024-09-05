@@ -32,6 +32,19 @@ public static class CollectionExt {
 	}
 
 	/// <summary>
+	/// Remove last element from given list.
+	/// The list must contain at least one element. Otherwise throw exception.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="list"></param>
+	/// <returns></returns>
+	public static T RemoveLastDk<T>(this List<T> list) {
+		var last = list[^1];
+		list.RemoveAt(list.Count - 1);
+		return last;
+	}
+
+	/// <summary>
 	/// Convert collection `values` to map of: key, values.
 	/// </summary>
 	/// <typeparam name="TKey"></typeparam>
