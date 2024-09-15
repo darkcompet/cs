@@ -1,19 +1,21 @@
 #pragma warning disable IDE0130 // Namespace がフォルダー構造と一致しません
 namespace Tool.Compet.Core;
 
-/// Extension for collection (array, list, set, map,...).
+/// Extension for collection (list, set, map,...).
 public static class CollectionExt {
-	public static bool IsEmptyDk<T>(this T[]? list) {
-		return list == null || list.Length == 0;
-	}
-
+	/// <summary>
+	/// Check the collection is not null and not empty.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="list"></param>
+	/// <returns></returns>
 	public static bool IsEmptyDk<T>(this List<T>? list) {
 		return list == null || list.Count == 0;
 	}
 
 	/// <summary>
-	/// This perform optimization by remove last item instead, so array will not be shrinked.
-	/// We recommend use this if you don't care item-order after removed.
+	/// Remove element at given index without re-arrange elements in [index, lastIndex].
+	/// This is faster than normal remove, but should only use if you don't care about element's order after the index.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="list"></param>
