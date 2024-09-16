@@ -3,15 +3,27 @@ namespace Tool.Compet.Core;
 
 using System.Runtime.CompilerServices;
 
+/// <summary>
 /// Extension for string.
-public static class DkStrings {
+/// </summary>
+public static class StringExt {
+	/// <summary>
 	/// Compare 2 strings with `Ordinal` comparision (byte-level).
+	/// </summary>
+	/// <param name="me"></param>
+	/// <param name="other"></param>
+	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool EqualsDk(this string? me, string? other) {
 		return me == null ? other == null : me.Equals(other, StringComparison.Ordinal);
 	}
 
+	/// <summary>
 	/// Compare 2 strings with `OrdinalIgnoreCase` comparision (byte-level).
+	/// </summary>
+	/// <param name="me"></param>
+	/// <param name="other"></param>
+	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool EqualsIgnoreCaseDk(this string? me, string? other) {
 		return me == null ? other == null : me.Equals(other, StringComparison.OrdinalIgnoreCase);
@@ -27,26 +39,45 @@ public static class DkStrings {
 		return me != null && me.Length > 0;
 	}
 
+	/// <summary>
 	/// Check this string starts with given `value` by comparing as `Ordinal` (byte-level).
+	/// </summary>
+	/// <param name="me"></param>
+	/// <param name="value"></param>
+	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool StartsWithDk(this string me, string value) {
 		return me.StartsWith(value, StringComparison.Ordinal);
 	}
 
+	/// <summary>
 	/// Check this string ends with given `value` by comparing as `Ordinal` (byte-level).
+	/// </summary>
+	/// <param name="me"></param>
+	/// <param name="value"></param>
+	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool EndsWithDk(this string me, string value) {
 		return me.EndsWith(value, StringComparison.Ordinal);
 	}
 
+	/// <summary>
 	/// @param startIndex: Inclusive.
+	/// </summary>
+	/// <param name="me"></param>
+	/// <param name="startIndex"></param>
+	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static string SubstringDk(this string me, int startIndex) {
 		return me[startIndex..];
 	}
 
-	/// @param startIndex: Inclusive.
-	/// @param endIndex: Exclusive.
+	/// <summary>
+	/// </summary>
+	/// <param name="me"></param>
+	/// <param name="startIndex">Inclusive</param>
+	/// <param name="endIndex">Exclusive</param>
+	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static string SubstringDk(this string me, int startIndex, int endIndex) {
 		return me[startIndex..endIndex];
@@ -126,7 +157,12 @@ public static class DkStrings {
 		return -1;
 	}
 
+	/// <summary>
 	/// Get last index of given `element` in the array. Returns -1 if not found.
+	/// </summary>
+	/// <param name="arr"></param>
+	/// <param name="element"></param>
+	/// <returns></returns>
 	public static int LastIndexOfDk(this string[] arr, string? element) {
 		for (var index = arr.Length - 1; index >= 0; --index) {
 			if (arr[index].Equals(element, StringComparison.Ordinal)) {

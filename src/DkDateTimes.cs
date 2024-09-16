@@ -1,25 +1,11 @@
 #pragma warning disable IDE0130 // Namespace がフォルダー構造と一致しません
 namespace Tool.Compet.Core;
 
-using System.Globalization;
-
 /// Extension for string.
 public static class DkDateTimes {
 	public const string FMT_DATE = "yyyy-MM-dd";
 	public const string FMT_TIME = "HH:mm:ss";
 	public const string FMT_DATETIME = "yyyy-MM-dd HH:mm:ss";
-
-	/// <summary>
-	/// Format datatime in given format.
-	/// Ref: https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
-	/// Ref: https://www.c-sharpcorner.com/blogs/date-and-time-format-in-c-sharp-programming1
-	/// </summary>
-	/// <param name="me"></param>
-	/// <param name="format">For eg,. yyyy-MM-dd HH:mm:ss</param>
-	/// <returns></returns>
-	public static string FormatDk(this DateTime me, string? format = FMT_DATETIME) {
-		return me.ToString(format, CultureInfo.InvariantCulture);
-	}
 
 	/// <summary>
 	/// Epoch time in milliseconds of now (number of milliseconds has elapsed from 1970-01-01T00:00:00.000Z).
