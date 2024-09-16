@@ -49,18 +49,18 @@ public static class CollectionExt {
 	}
 
 	/// <summary>
-	/// Convert collection `values` to map of: key, values.
+	/// Grouping the `values` by the key that is provided via function `KeyOf`.
 	/// </summary>
 	/// <typeparam name="TKey"></typeparam>
 	/// <typeparam name="TValue"></typeparam>
 	/// <param name="values"></param>
-	/// <param name="CalcKey">Calculate key that maps with the value</param>
+	/// <param name="KeyOf">Get key to grouping the value</param>
 	/// <returns></returns>
-	public static DkHashMap<TKey, List<TValue>> GroupByDk<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> CalcKey) where TKey : notnull {
-		var key2values = new DkHashMap<TKey, List<TValue>>();
+	public static Dictionary<TKey, List<TValue>> GroupByDk<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> KeyOf) where TKey : notnull {
+		var key2values = new Dictionary<TKey, List<TValue>>();
 		foreach (var item in values) {
-			var key = CalcKey(item);
-			var list = key2values[key];
+			var key = KeyOf(item);
+			var list = key2values.GetValueOrDefault(key);
 			if (list != null) {
 				list.Add(item);
 			}
