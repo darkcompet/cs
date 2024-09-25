@@ -78,7 +78,7 @@ public static class CollectionExt {
 	/// <param name="separator"></param>
 	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static string JoinByDk(this IEnumerable<string> me, string separator) {
+	public static string JoinWithDk(this IEnumerable<string> me, string separator) {
 		return string.Join(separator, me);
 	}
 
@@ -88,7 +88,7 @@ public static class CollectionExt {
 	/// <param name="me"></param>
 	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static string JoinByNewLineDk(this IEnumerable<string> me) {
+	public static string JoinWithNewLineDk(this IEnumerable<string> me) {
 		return string.Join(Environment.NewLine, me);
 	}
 }
