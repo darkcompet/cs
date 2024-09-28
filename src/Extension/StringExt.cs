@@ -174,6 +174,11 @@ public static class StringExt {
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Guid? ParseGuidDk(this string? me) {
-		return me is null ? null : Guid.Parse(me);
+		try {
+			return me is null ? null : Guid.Parse(me);
+		}
+		catch {
+			return null;
+		}
 	}
 }
