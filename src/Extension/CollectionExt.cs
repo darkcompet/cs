@@ -91,4 +91,14 @@ public static class CollectionExt {
 	public static string JoinWithNewLineDk(this IEnumerable<string> me) {
 		return string.Join(Environment.NewLine, me);
 	}
+
+	/// <summary>
+	/// Add to collection OS-dependent linefeed.
+	/// </summary>
+	/// <param name="me"></param>
+	/// <returns></returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void AddNewLineDk(this List<string> me) {
+		me.Add(Environment.NewLine);
+	}
 }
