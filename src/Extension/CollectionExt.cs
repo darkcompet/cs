@@ -103,13 +103,14 @@ public static class CollectionExt {
 	}
 
 	/// <summary>
-	/// Add range to the collection (list, set, ...)
+	/// Add each element in given elements to the collection (list, set, ...).
+	/// Note: this does not perform add (bulk) range !
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="me"></param>
-	/// <param name="items"></param>
-	public static void AddRangeDk<T>(this ICollection<T> me, ICollection<T> items) {
-		foreach (var item in items) {
+	/// <param name="elements"></param>
+	public static void AddElementsDk<T>(this ICollection<T> me, ICollection<T> elements) {
+		foreach (var item in elements) {
 			me.Add(item);
 		}
 	}
