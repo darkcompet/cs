@@ -101,4 +101,16 @@ public static class CollectionExt {
 	public static void AddNewLineDk(this List<string> me) {
 		me.Add(Environment.NewLine);
 	}
+
+	/// <summary>
+	/// Add range to the collection (list, set, ...)
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="me"></param>
+	/// <param name="items"></param>
+	public static void AddRangeDk<T>(this ICollection<T> me, ICollection<T> items) {
+		foreach (var item in items) {
+			me.Add(item);
+		}
+	}
 }
