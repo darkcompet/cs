@@ -7,8 +7,13 @@ using System.Runtime.CompilerServices;
 /// Extension for path OS.
 /// </summary>
 public static class PathExt {
+	/// <summary>
+	/// Fix path separator by replace directory separator to match with current OS (for cross-platform purpose).
+	/// </summary>
+	/// <param name="path"></param>
+	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static string FixPathSeparatorDk(this string path) {
+	public static string ReplaceDirectorySeparatorDk(this string path) {
 		return path.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
 	}
 }
