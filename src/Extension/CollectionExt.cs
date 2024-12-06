@@ -78,6 +78,17 @@ public static class CollectionExt {
 	/// <param name="separator"></param>
 	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static string JoinWithDk(this IEnumerable<string> me, char separator) {
+		return string.Join(separator, me);
+	}
+
+	/// <summary>
+	/// Join collection of string by given separator.
+	/// </summary>
+	/// <param name="me"></param>
+	/// <param name="separator"></param>
+	/// <returns></returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static string JoinWithDk(this IEnumerable<string> me, string separator) {
 		return string.Join(separator, me);
 	}
@@ -90,6 +101,16 @@ public static class CollectionExt {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static string JoinWithNewLineDk(this IEnumerable<string> me) {
 		return string.Join(Environment.NewLine, me);
+	}
+
+	/// <summary>
+	/// Join collection of string by OS-dependent directory-separator (/, \).
+	/// </summary>
+	/// <param name="me"></param>
+	/// <returns></returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static string JoinWithDirectorySeparatorDk(this IEnumerable<string> me) {
+		return string.Join(Path.DirectorySeparatorChar, me);
 	}
 
 	/// <summary>
