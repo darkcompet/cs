@@ -3,13 +3,13 @@ namespace Tool.Compet.Core;
 
 public static class DictionaryExt {
 	/// <summary>
-	/// Add (over-write for existed entry) given pairs to the dictionary.
+	/// Upsert pairs to the dictionary.
 	/// </summary>
 	/// <typeparam name="TKey"></typeparam>
 	/// <typeparam name="TValue"></typeparam>
 	/// <param name="me"></param>
 	/// <param name="elements"></param>
-	public static void AddRangeDk<TKey, TValue>(this Dictionary<TKey, TValue> me, Dictionary<TKey, TValue> elements) {
+	public static void PutRangeDk<TKey, TValue>(this Dictionary<TKey, TValue> me, Dictionary<TKey, TValue> elements) {
 		foreach (var (key, value) in elements) {
 			me[key] = value;
 		}
