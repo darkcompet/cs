@@ -13,7 +13,7 @@ public static class PathExt {
 	/// <param name="path"></param>
 	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static string ReplaceDirectorySeparatorDk(this string path) {
-		return path.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
+	public static string FixPathSeparatorDk(this string path) {
+		return path.Replace(Path.DirectorySeparatorChar == '/' ? '\\' : '/', Path.DirectorySeparatorChar);
 	}
 }
