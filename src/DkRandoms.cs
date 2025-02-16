@@ -5,16 +5,13 @@ using System.Security.Cryptography;
 
 public class DkRandoms {
 	/// <summary>
-	/// From current timestamp, it merges with suffix as random string in Base62.
+	/// At given timestamp (8 bytes), it merges with suffix as random string in Base62.
 	/// </summary>
 	/// <param name="randomLength"></param>
 	/// <returns></returns>
-	public static string GenerateAtCurrentTimestamp(int randomLength) {
+	public static string GenAtTimestamp(long timestamp, int randomLength) {
 		const int timestampLength = 8;
 		Span<byte> data = stackalloc byte[timestampLength + randomLength];
-
-		// 1. Get current timestamp in milliseconds
-		var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
 		// Convert timestamp to bytes (Little Endian by default)
 		Span<byte> timestampBytes = stackalloc byte[timestampLength];

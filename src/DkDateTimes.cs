@@ -11,7 +11,7 @@ public static class DkDateTimes {
 	/// Epoch time in milliseconds of now (number of milliseconds has elapsed from 1970-01-01T00:00:00.000Z).
 	/// Ref: https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tounixtimeseconds?view=net-7.0
 	/// </summary>
-	public static long currentUnixTimeInMillis => DateTimeOffset.Now.ToUnixTimeMilliseconds();
+	public static long currentUnixTimeInMilliseconds => DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
 	/// <summary>
 	/// Epoch time in seconds of now (number of seconds has elapsed from 1970-01-01T00:00:00.000Z).
@@ -23,7 +23,7 @@ public static class DkDateTimes {
 	/// Epoch time in milliseconds of UTC-now (number of milliseconds has elapsed from 1970-01-01T00:00:00.000Z).
 	/// Ref: https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tounixtimeseconds?view=net-7.0
 	/// </summary>
-	public static long currentUnixUtcTimeInMillis => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+	public static long currentUnixUtcTimeInMilliseconds => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
 	/// <summary>
 	/// Epoch time in seconds of UTC-now (number of seconds has elapsed from 1970-01-01T00:00:00.000Z).
@@ -47,5 +47,29 @@ public static class DkDateTimes {
 	/// <returns></returns>
 	public static DateTime ConvertUnixTimeMillisecondsToUtcDatetime(long millis) {
 		return DateTimeOffset.FromUnixTimeMilliseconds(millis).UtcDateTime;
+	}
+
+	public static long CalcTimestampMilliseconds(DateTime end, DateTime start) {
+		return (long)(end - start).TotalMilliseconds;
+	}
+
+	public static long CalcTimestampMilliseconds(DateTimeOffset end, DateTimeOffset start) {
+		return (long)(end - start).TotalMilliseconds;
+	}
+
+	public static long CalcTimestampMicroseconds(DateTime end, DateTime start) {
+		return (long)(end - start).TotalMicroseconds;
+	}
+
+	public static long CalcTimestampMicroseconds(DateTimeOffset end, DateTimeOffset start) {
+		return (long)(end - start).TotalMicroseconds;
+	}
+
+	public static long CalcTimestampNanoseconds(DateTime end, DateTime start) {
+		return (long)(end - start).TotalNanoseconds;
+	}
+
+	public static long CalcTimestampNanoseconds(DateTimeOffset end, DateTimeOffset start) {
+		return (long)(end - start).TotalNanoseconds;
 	}
 }

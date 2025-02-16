@@ -4,6 +4,7 @@ namespace Tool.Compet.Core;
 using System.Numerics;
 
 public class DkBase62 {
+	public const int BASE = 62;
 	public static readonly string Base62Chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	/// <summary>
@@ -19,11 +20,11 @@ public class DkBase62 {
 
 		// Convert each number's digit to char (build in reverse order)
 		while (base62Number > 0) {
-			base62Number = BigInteger.DivRem(base62Number, 62, out var remainder);
+			base62Number = BigInteger.DivRem(base62Number, BASE, out var remainder);
 			result.Add(Base62Chars[(int)remainder]);
 		}
 
-		// Reverse the list in-place
+		// Reverse digits
 		result.Reverse();
 
 		return new string([.. result]);
