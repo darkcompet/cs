@@ -12,7 +12,7 @@ public class DkBase62 {
 	/// <param name="data"></param>
 	/// <returns></returns>
 	public static string Encode(byte[] data) {
-		var result = new List<char>(20);
+		var result = new List<char>(32);
 
 		// Build number for given bytes
 		var base62Number = new BigInteger(data, isBigEndian: true);
