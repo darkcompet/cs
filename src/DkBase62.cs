@@ -8,25 +8,71 @@ public class DkBase62 {
 	public static readonly string Base62Chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	/// <summary>
+	/// Precompute lookup table for finding index of Base62 char.
+	/// It does support only ASCII range.
+	/// </summary>
+	private static readonly int[] Base62Indices = new int[128];
+
+	static DkBase62() {
+		for (var index = Base62Chars.Length - 1; index >= 0; --index) {
+			Base62Indices[Base62Chars[index]] = index;
+		}
+	}
+
+	/// <summary>
 	/// Encode given bytes to string in Base62 chars.
 	/// </summary>
 	/// <param name="data"></param>
 	/// <returns></returns>
-	public static string Encode(byte[] data) {
-		var result = new List<char>(32);
+	public static string Encode(byte[] data, int initCapacity = 32) {
+		var base62 = new List<char>(initCapacity);
 
 		// Build number for given bytes
 		var base62Number = new BigInteger(data, isBigEndian: true);
 
+		// Handle zero case
+		if (base62Number == 0) {
+			return "0";
+		}
+
 		// Convert each number's digit to char (build in reverse order)
 		while (base62Number > 0) {
 			base62Number = BigInteger.DivRem(base62Number, BASE, out var remainder);
-			result.Add(Base62Chars[(int)remainder]);
+			base62.Add(Base62Chars[(int)remainder]);
 		}
 
 		// Reverse digits
-		result.Reverse();
+		base62.Reverse();
 
-		return new string([.. result]);
+		return new string([.. base62]);
+	}
+
+	/// <summary>
+	/// Convert Base62 back to 16-byte array.
+	/// </summary>
+	/// <param name="base62"></param>
+	/// <param name="fixedLength">Fixed length of output</param>
+	/// <returns></returns>
+	public static byte[] Decode(string base62, int fixedLength) {
+		var num = new BigInteger(0);
+		foreach (var c in base62) {
+			num = (num * BASE) + Base62Indices[c];
+		}
+
+		// Convert to bytes (Big-Endian order)
+		var bytes = num.ToByteArray(isBigEndian: true).AsSpan();
+
+		// Ensure exactly `fixedLength` bytes by right-aligning
+		Span<byte> buffer = stackalloc byte[fixedLength];
+
+		var offset = fixedLength - bytes.Length;
+		if (offset >= 0) {
+			bytes.CopyTo(buffer[offset..]);
+		}
+		else {
+			bytes.Slice(-offset, fixedLength).CopyTo(buffer);
+		}
+
+		return buffer.ToArray();
 	}
 }

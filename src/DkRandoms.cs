@@ -1,39 +1,33 @@
 #pragma warning disable IDE0130 // Namespace がフォルダー構造と一致しません
 namespace Tool.Compet.Core;
 
+using System.Buffers.Binary;
 using System.Security.Cryptography;
 
 public class DkRandoms {
+	private const int TimestampByteCount = 8;
+
 	/// <summary>
-	/// At given timestamp (8 bytes), it merges with suffix as random string in Base62.
+	/// Generates a unique identifier using a given timestamp (8 bytes)
+	/// and a random suffix of the specified length.
 	/// </summary>
-	/// <param name="randomLength"></param>
-	/// <returns></returns>
-	public static string GenAtTimestamp(long timestamp, int randomLength) {
-		const int timestampLength = 8;
-		Span<byte> data = stackalloc byte[timestampLength + randomLength];
-
-		// Convert timestamp to bytes (Little Endian by default)
-		Span<byte> timestampBytes = stackalloc byte[timestampLength];
-		BitConverter.TryWriteBytes(timestampBytes, timestamp);
-
-		// Only reverse if system is Little Endian
-		if (BitConverter.IsLittleEndian) {
-			timestampBytes.Reverse();
+	/// <param name="timestamp">The timestamp or sequential number (8 bytes).</param>
+	/// <param name="randomLength">The number of random bytes to append.</param>
+	/// <returns>A byte array containing the 8-byte timestamp followed by random bytes.</returns>
+	public static byte[] GenRandomWithTimestamp(long timestamp, int randomLength) {
+		if (randomLength < 0) {
+			throw new ArgumentOutOfRangeException(nameof(randomLength), "Random length cannot be negative.");
 		}
 
-		// Copy timestamp bytes to data
-		timestampBytes.CopyTo(data);
+		var totalLength = TimestampByteCount + randomLength;
+		Span<byte> data = stackalloc byte[totalLength];
 
-		// 2. Generate random bytes
-		RandomNumberGenerator.Fill(data.Slice(timestampLength, randomLength));
+		// Write timestamp directly in Big-Endian format
+		BinaryPrimitives.WriteInt64BigEndian(data, timestamp);
 
-		// Span<byte> valueBytes = BitConverter.GetBytes(long.MaxValue);
-		// Ensure the data span is large enough
-		// Fill the Span at position 8 (index 7)
-		// valueBytes.CopyTo(data.Slice(timestampLength, valueBytes.Length));
+		// Generate random bytes
+		RandomNumberGenerator.Fill(data.Slice(TimestampByteCount, randomLength));
 
-		// 3. Encode as base62
-		return DkBase62.Encode(data.ToArray());
+		return data.ToArray();
 	}
 }
