@@ -24,7 +24,7 @@ public class DkBase62 {
 	/// </summary>
 	/// <param name="data"></param>
 	/// <returns></returns>
-	public static string Encode(byte[] data, int initCapacity = 32) {
+	public static string Encode(byte[] data, int initCapacity = 22) {
 		var base62 = new List<char>(initCapacity);
 
 		// Build number for given bytes
