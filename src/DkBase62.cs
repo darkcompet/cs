@@ -4,7 +4,7 @@ namespace Tool.Compet.Core;
 using System.Numerics;
 
 public class DkBase62 {
-	public const int BASE = 62;
+	public const int BASE_NUM = 62;
 	public static readonly string Base62Chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	/// <summary>
@@ -24,11 +24,11 @@ public class DkBase62 {
 	/// </summary>
 	/// <param name="data"></param>
 	/// <returns></returns>
-	public static string Encode(byte[] data, int initCapacity = 22) {
+	public static string Encode(byte[] data, int initCapacity = 22, bool isBigEndian = true) {
 		var base62 = new List<char>(initCapacity);
 
 		// Build number for given bytes
-		var base62Number = new BigInteger(data, isBigEndian: true);
+		var base62Number = new BigInteger(data, isBigEndian: isBigEndian);
 
 		// Handle zero case
 		if (base62Number == 0) {
@@ -37,7 +37,7 @@ public class DkBase62 {
 
 		// Convert each number's digit to char (build in reverse order)
 		while (base62Number > 0) {
-			base62Number = BigInteger.DivRem(base62Number, BASE, out var remainder);
+			base62Number = BigInteger.DivRem(base62Number, BASE_NUM, out var remainder);
 			base62.Add(Base62Chars[(int)remainder]);
 		}
 
@@ -53,14 +53,14 @@ public class DkBase62 {
 	/// <param name="base62"></param>
 	/// <param name="fixedLength">Fixed length of output</param>
 	/// <returns></returns>
-	public static byte[] Decode(string base62, int fixedLength) {
+	public static byte[] Decode(string base62, int fixedLength, bool isBigEndian = true) {
 		var num = new BigInteger(0);
 		foreach (var c in base62) {
-			num = (num * BASE) + Base62Indices[c];
+			num = (num * BASE_NUM) + Base62Indices[c];
 		}
 
 		// Convert to bytes (Big-Endian order)
-		var bytes = num.ToByteArray(isBigEndian: true).AsSpan();
+		var bytes = num.ToByteArray(isBigEndian: isBigEndian).AsSpan();
 
 		// Ensure exactly `fixedLength` bytes by right-aligning
 		Span<byte> buffer = stackalloc byte[fixedLength];
