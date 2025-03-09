@@ -24,11 +24,11 @@ public class DkBase62 {
 	/// </summary>
 	/// <param name="data"></param>
 	/// <returns></returns>
-	public static string Encode(byte[] data, int initCapacity = 22, bool isBigEndian = true) {
+	public static string Encode(byte[] data, int initCapacity = 22, bool isUnsigned = false, bool isBigEndian = false) {
 		var base62 = new List<char>(initCapacity);
 
 		// Build number for given bytes
-		var base62Number = new BigInteger(data, isBigEndian: isBigEndian);
+		var base62Number = new BigInteger(data, isUnsigned: isUnsigned, isBigEndian: isBigEndian);
 
 		// Handle zero case
 		if (base62Number == 0) {
