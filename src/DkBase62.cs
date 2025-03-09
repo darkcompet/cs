@@ -28,7 +28,7 @@ public class DkBase62 {
 		var base62 = new List<char>(initCapacity);
 
 		// Build number for given bytes
-		var base62Number = new BigInteger(data, isUnsigned: isUnsigned, isBigEndian: isBigEndian);
+		var base62Number = BigInteger.Abs(new BigInteger(data, isUnsigned: isUnsigned, isBigEndian: isBigEndian));
 
 		// Handle zero case
 		if (base62Number == 0) {
@@ -53,14 +53,14 @@ public class DkBase62 {
 	/// <param name="base62"></param>
 	/// <param name="fixedLength">Fixed length of output</param>
 	/// <returns></returns>
-	public static byte[] Decode(string base62, int fixedLength, bool isBigEndian = true) {
+	public static byte[] Decode(string base62, int fixedLength, bool isUnsigned = false, bool isBigEndian = false) {
 		var num = new BigInteger(0);
 		foreach (var c in base62) {
 			num = (num * BASE_NUM) + Base62Indices[c];
 		}
 
 		// Convert to bytes (Big-Endian order)
-		var bytes = num.ToByteArray(isBigEndian: isBigEndian).AsSpan();
+		var bytes = num.ToByteArray(isUnsigned: isUnsigned, isBigEndian: isBigEndian).AsSpan();
 
 		// Ensure exactly `fixedLength` bytes by right-aligning
 		Span<byte> buffer = stackalloc byte[fixedLength];
