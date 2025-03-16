@@ -9,7 +9,7 @@ public static class DictionaryExt {
 	/// <typeparam name="TValue"></typeparam>
 	/// <param name="me"></param>
 	/// <param name="elements"></param>
-	public static void PutRangeDk<TKey, TValue>(this Dictionary<TKey, TValue> me, Dictionary<TKey, TValue> elements) {
+	public static void PutElementsDk<TKey, TValue>(this Dictionary<TKey, TValue> me, Dictionary<TKey, TValue> elements) {
 		foreach (var (key, value) in elements) {
 			me[key] = value;
 		}
@@ -22,7 +22,7 @@ public static class DictionaryExt {
 	/// <typeparam name="TValue"></typeparam>
 	/// <param name="me"></param>
 	/// <param name="elements"></param>
-	public static void TryAddRangeDk<TKey, TValue>(this Dictionary<TKey, TValue> me, Dictionary<TKey, TValue> elements) {
+	public static void TryAddElementsDk<TKey, TValue>(this Dictionary<TKey, TValue> me, Dictionary<TKey, TValue> elements) {
 		foreach (var (key, value) in elements) {
 			me.TryAdd(key, value);
 		}
