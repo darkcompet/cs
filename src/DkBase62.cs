@@ -21,6 +21,7 @@ public class DkBase62 {
 
 	/// <summary>
 	/// Encode given bytes to string in Base62 chars.
+	/// It takes about 0.9 micro-seconds !
 	/// </summary>
 	/// <param name="data"></param>
 	/// <returns></returns>
@@ -49,6 +50,7 @@ public class DkBase62 {
 
 	/// <summary>
 	/// Convert Base62 back to 16-byte array.
+	/// It takes about 0.7 micro-seconds !
 	/// </summary>
 	/// <param name="base62"></param>
 	/// <param name="fixedLength">Fixed length of output</param>
