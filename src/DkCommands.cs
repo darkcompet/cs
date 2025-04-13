@@ -2,6 +2,7 @@
 namespace Tool.Compet.Core;
 
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 public class DkCommands {
 	/// <summary>
@@ -9,16 +10,26 @@ public class DkCommands {
 	/// </summary>
 	/// <param name="command">Can make to multiple by concat commands. For eg,. cd ~/test/com && ls -la</param>
 	/// <param name="workingDirPath">Specify which directory that command should be executed in. Default is null which inherits working directory of parent process.</param>
-	/// <param name="filePath">By default, we use /bin/bash as file to run the command.</param>
+	/// <param name="filePath">By default, we use cmd.exe or /bin/bash as file to run the command.</param>
 	/// <param name="cancellationToken"></param>
 	/// <returns>Tupple of (Result, Error)</returns>
-	public static async Task<(string, string)> RunCommandAsync(string command, string? workingDirPath = null, string filePath = "bash", CancellationToken cancellationToken = default) {
+	public static async Task<(string, string)> RunCommandAsync(string command, string? workingDirPath = null, string? filePath = null, CancellationToken cancellationToken = default) {
 		var escapedCommand = command.Replace("\"", "\\\"");
+
+		// Detect OS and set the correct shell
+		if (string.IsNullOrEmpty(filePath)) {
+			filePath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "/bin/bash";
+		}
+
+		// Set correct arguments format
+		var arguments = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+			? $"/c \"{escapedCommand}\""
+			: $"-c \"{escapedCommand}\"";
 
 		var process = new Process() {
 			StartInfo = new ProcessStartInfo {
 				FileName = filePath,
-				Arguments = $"-c \"{escapedCommand}\"",
+				Arguments = arguments,
 				UseShellExecute = false,
 				WorkingDirectory = workingDirPath,
 				CreateNoWindow = true,
@@ -42,7 +53,7 @@ public class DkCommands {
 		// Release process resource
 		process.Close();
 
-		Console.WriteLine($"---> Run command: {command}. Output: {output}, Error: {error}");
+		Console.WriteLine($"---> Executed command: {command}. Output: {output}, Error: {error}");
 
 		return (output, error);
 	}
@@ -57,7 +68,12 @@ public class DkCommands {
 	/// <param name="filePath"></param>
 	/// <param name="cancellationToken"></param>
 	/// <returns>(outputs, errors)</returns>
-	public static async Task<(List<string?>, List<string?>)> RunBatchCommandsAsync(IEnumerable<string> commands, string? workingDirPath = null, string filePath = "bash", CancellationToken cancellationToken = default) {
+	public static async Task<(List<string?>, List<string?>)> RunBatchCommandsAsync(IEnumerable<string> commands, string? workingDirPath = null, string? filePath = null, CancellationToken cancellationToken = default) {
+		// Detect OS and set the correct shell
+		if (string.IsNullOrEmpty(filePath)) {
+			filePath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "/bin/bash";
+		}
+
 		var process = new Process {
 			StartInfo = new ProcessStartInfo {
 				FileName = filePath,
