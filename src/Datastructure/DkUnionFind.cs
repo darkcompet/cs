@@ -79,8 +79,8 @@ public class DkUnionFind {
 
 	public int CountRoots() {
 		var count = 0;
-		foreach (var v in this.parent) {
-			if (v == this.Find(v)) {
+		for (var v = this.elementCount - 1; v >= 0; --v) {
+			if (v == this.parent[v]) {
 				++count;
 			}
 		}
