@@ -26,4 +26,31 @@ public static class DkFiles {
 
 		await srcStream.CopyToAsync(dstStream, bufferSize);
 	}
+
+	/// <summary>
+	/// Copy files (also files in child folders) from src to dst.
+	/// </summary>
+	/// <param name="srcDirPath"></param>
+	/// <param name="dstDirPath"></param>
+	/// <param name="overwrite"></param>
+	public static void CopyDirectory(string srcDirPath, string dstDirPath, bool overwrite = true) {
+		// Ensure destination exists
+		Directory.CreateDirectory(dstDirPath);
+
+		// Copy all files
+		foreach (var filePath in Directory.GetFiles(srcDirPath)) {
+			var fileName = Path.GetFileName(filePath);
+			var destFile = Path.Combine(dstDirPath, fileName);
+
+			File.Copy(filePath, destFile, overwrite);
+		}
+
+		// Recursively copy sub-directories
+		foreach (var dirPath in Directory.GetDirectories(srcDirPath)) {
+			var dirName = Path.GetFileName(dirPath);
+			var destSubDir = Path.Combine(dstDirPath, dirName);
+
+			CopyDirectory(dirPath, destSubDir, overwrite);
+		}
+	}
 }
