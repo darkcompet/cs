@@ -14,8 +14,6 @@ public class DkCommands {
 	/// <param name="cancellationToken"></param>
 	/// <returns>Tupple of (Result, Error)</returns>
 	public static async Task<(string, string)> RunCommandAsync(string command, string? workingDirPath = null, string? filePath = null, CancellationToken cancellationToken = default) {
-		var escapedCommand = command.Replace("\"", "\\\"");
-
 		// Detect OS and set the correct shell
 		if (string.IsNullOrEmpty(filePath)) {
 			filePath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "/bin/bash";
@@ -23,8 +21,8 @@ public class DkCommands {
 
 		// Set correct arguments format
 		var arguments = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-			? $"/c \"{escapedCommand}\""
-			: $"-c \"{escapedCommand}\"";
+			? $"/c \"{command}\""
+			: $"-c \"{command}\"";
 
 		var process = new Process() {
 			StartInfo = new ProcessStartInfo {
@@ -95,7 +93,7 @@ public class DkCommands {
 		};
 		process.ErrorDataReceived += (sendingProcess, outLine) => {
 			errors.Add(outLine.Data ?? string.Empty);
-			Console.WriteLine($"---> Run bulk error: {outLine.Data}");
+			Console.WriteLine($"---> Error run bulk: {outLine.Data}");
 		};
 
 		// After start, the process will execute our input (commands)
