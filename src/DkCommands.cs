@@ -68,7 +68,7 @@ public class DkCommands {
 	/// <param name="filePath"></param>
 	/// <param name="cancellationToken"></param>
 	/// <returns>(outputs, errors)</returns>
-	public static async Task<(List<string?>, List<string?>)> RunBatchCommandsAsync(IEnumerable<string> commands, string? workingDirPath = null, string? filePath = null, CancellationToken cancellationToken = default) {
+	public static async Task<(List<string>, List<string>)> RunBatchCommandsAsync(IEnumerable<string> commands, string? workingDirPath = null, string? filePath = null, CancellationToken cancellationToken = default) {
 		// Detect OS and set the correct shell
 		if (string.IsNullOrEmpty(filePath)) {
 			filePath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "/bin/bash";
@@ -87,14 +87,14 @@ public class DkCommands {
 		};
 
 		// Listen to output event
-		var outputs = new List<string?>();
-		var errors = new List<string?>();
+		var outputs = new List<string>();
+		var errors = new List<string>();
 		process.OutputDataReceived += (sendingProcess, outLine) => {
-			outputs.Add(outLine.Data);
+			outputs.Add(outLine.Data ?? string.Empty);
 			Console.WriteLine($"---> Run bulk output: {outLine.Data}");
 		};
 		process.ErrorDataReceived += (sendingProcess, outLine) => {
-			errors.Add(outLine.Data);
+			errors.Add(outLine.Data ?? string.Empty);
 			Console.WriteLine($"---> Run bulk error: {outLine.Data}");
 		};
 
