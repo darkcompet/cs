@@ -19,15 +19,9 @@ public class DkCommands {
 			filePath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "/bin/bash";
 		}
 
-		// Set correct arguments format
-		var arguments = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-			? $"/c \"{command}\""
-			: $"-c \"{command}\"";
-
 		var process = new Process() {
 			StartInfo = new ProcessStartInfo {
 				FileName = filePath,
-				Arguments = arguments,
 				UseShellExecute = false,
 				WorkingDirectory = workingDirPath,
 				CreateNoWindow = true,
@@ -40,6 +34,11 @@ public class DkCommands {
 
 		// After start, the process will execute our input (commands)
 		process.Start();
+
+		// Write the command directly to StandardInput
+		await process.StandardInput.WriteLineAsync(command);
+		await process.StandardInput.FlushAsync(cancellationToken);
+		process.StandardInput.Close();
 
 		// Read output
 		var output = await process.StandardOutput.ReadToEndAsync(cancellationToken);
