@@ -88,11 +88,9 @@ public class DkCommands {
 		var errors = new List<string>();
 		process.OutputDataReceived += (sendingProcess, outLine) => {
 			outputs.Add(outLine.Data ?? string.Empty);
-			Console.WriteLine($"---> Run bulk output: {outLine.Data}");
 		};
 		process.ErrorDataReceived += (sendingProcess, outLine) => {
 			errors.Add(outLine.Data ?? string.Empty);
-			Console.WriteLine($"---> Error run bulk: {outLine.Data}");
 		};
 
 		// After start, the process will execute our input (commands)
@@ -104,7 +102,7 @@ public class DkCommands {
 
 		// Write commands into input stream and close to execute.
 		foreach (var cmd in commands) {
-			Console.WriteLine($"---> Run bulk commands: {cmd}");
+			Console.WriteLine($"---> Run-bulk command: {cmd}");
 			await process.StandardInput.WriteLineAsync(cmd);
 		}
 		process.StandardInput.Close();
