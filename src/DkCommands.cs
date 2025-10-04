@@ -50,8 +50,6 @@ public class DkCommands {
 		// Release process resource
 		process.Close();
 
-		Console.WriteLine($"---> Executed command: {command}. Output: {output}, Error: {error}");
-
 		return (output, error);
 	}
 
@@ -102,7 +100,6 @@ public class DkCommands {
 
 		// Write commands into input stream and close to execute.
 		foreach (var cmd in commands) {
-			Console.WriteLine($"---> Run-bulk command: {cmd}");
 			await process.StandardInput.WriteLineAsync(cmd);
 		}
 		process.StandardInput.Close();
