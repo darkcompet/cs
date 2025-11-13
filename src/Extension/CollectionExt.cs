@@ -135,4 +135,12 @@ public static class CollectionExt {
 			me.Add(item);
 		}
 	}
+
+	/// <summary>
+	/// Join collection items with comma.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static string JoinWithCommaDk(this IEnumerable<string> me, char separator = ',') {
+		return string.Join(separator, me);
+	}
 }

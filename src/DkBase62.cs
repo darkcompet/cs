@@ -1,11 +1,10 @@
+using System.Numerics;
+
 #pragma warning disable IDE0130 // Namespace がフォルダー構造と一致しません
 namespace Tool.Compet.Core;
 
-using System.Numerics;
-
 public class DkBase62 {
-	public const int BASE_NUM = 62;
-	public static readonly string Base62Chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	public const string Base62Chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	/// <summary>
 	/// Precompute lookup table for finding index of Base62 char.
@@ -38,7 +37,7 @@ public class DkBase62 {
 
 		// Convert each number's digit to char (build in reverse order)
 		while (base62Number > 0) {
-			base62Number = BigInteger.DivRem(base62Number, BASE_NUM, out var remainder);
+			base62Number = BigInteger.DivRem(base62Number, Base62Chars.Length, out var remainder);
 			base62.Add(Base62Chars[(int)remainder]);
 		}
 
@@ -58,7 +57,7 @@ public class DkBase62 {
 	public static byte[] Decode(string base62, int fixedLength, bool isUnsigned = false, bool isBigEndian = false) {
 		var num = new BigInteger(0);
 		foreach (var c in base62) {
-			num = (num * BASE_NUM) + Base62Indices[c];
+			num = (num * Base62Chars.Length) + Base62Indices[c];
 		}
 
 		// Convert to bytes (Big-Endian order)
